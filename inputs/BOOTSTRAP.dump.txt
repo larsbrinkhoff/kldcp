@@ -1,0 +1,260 @@
+173000:    013700       MOV @#40,R0		; move (40) into r0
+173002:    000040
+173004:    013700       MOV @#177570,R0		; move (177570) into r0
+173006:    177570
+173010:    032700       BIT #1,R0		; is r0.1 = 1?
+173012:    000001
+173014:    001007       BNE 173034		; no, go to 173034
+173016:    000510       BR 173240		; yes, go to 173240
+173020:    005000       CLR R0			; clear r0
+173022:    000404       BR 173034		; go to 173034
+173024:    173030       SUBF F0,@(R0)+		; constant for previous instruction
+173026:    000340       SWAB -(R0)		; decrement (r0), swap bytes of resulting address
+173030:    012700       MOV #200,R0		; move 200 into r0
+173032:    000200
+173034:    010005       MOV R0,R5		; move (r0) into r5
+173036:    106300       ASLB R0			; arithmetic left-shift bytes of r0
+173040:    122700       CMPB #60,R0		; is odd byte of r0 = 60?
+173042:    000060
+173044:    101001       BHI 173050		; go to 173050 if higher
+173046:    005000       CLR R0			; r0 = 0
+173050:    000300       SWAB R0			; swap bytes of r0
+173052:    042700       BIC #177770,R0		; r0 = contents of r0 AND ~177770 = keep bottom 3 bits of r0
+173054:    177770
+173056:    105705       TSTB R5			; is odd byte of r5 = 1?
+173060:    100551       BMI 173404		; yes, go to 173404
+173062:    012737       MOV #173274,@#4		; set (4) = 173274
+173064:    173274
+173066:    000004
+173070:    005037       CLR @#6			; set (6) = 0
+173072:    000006
+173074:    012706       MOV #20,SP		; put 20 into the stack pointer
+173076:    000020
+173100:    012701       MOV #177170,R1		; put 177170 into r1
+173102:    177170
+173104:    005711       TST (R1)		; test bit 0 of word at that address
+173106:    005705       TST R5			; test bit 0 of r5
+173110:    100402       BMI 173116		; if 1, go to 173116
+173112:    005306       DEC SP			; decrement stack pointer
+173114:    002531       BLT 173400		; if less than 0, go to 173400
+173116:    000005       RESET			; blast Unibus
+173120:    032711       BIT #40,(R1)		; AND word addressed by r1 with 40, test result
+173122:    000040
+173124:    001775       BEQ 173120		; if that bit is 0, loop to 173120
+173126:    111704       MOVB (PC),R4		; move sign-extended odd byte addressed by PC to r4
+173130:    010002       MOV R0,R2		; move contents of r0 into r2
+173132:    001402       BEQ 173140		; if they were 0, go to 173140
+173134:    012702       MOV #20,R2		; else move 20 into r2
+173136:    000020
+173140:    052702       BIS #7,R2		; r2 = contents of r2 OR 7
+173142:    000007
+173144:    010103       MOV R1,R3		; move contents of r1 into r3
+173146:    010223       MOV R2,(R3)+		; move contents of r2 into word addressed by r3, then increment r3
+173150:    105711       TSTB (R1)		; test sign bit of word addressed by r1
+173152:    100376       BPL 173150		; loop back to 173150 if 0 = positive
+173154:    012713       MOV #1,(R3)		; move a 1 into word addressed by r3
+173156:    000001
+173160:    005304       DEC R4			; decrement r4
+173162:    001372       BNE 173150		; go to 173150 if that goes negative
+173164:    032711       BIT #100040,(R1)	; AND word at address in r1 with 100040, test result
+173166:    100040
+173170:    001775       BEQ 173164		; if result is 0, loop back to 173164
+173172:    100745       BMI 173106		; if high-order bit is set, go to 173106
+173174:    012711       MOV #3,(R1)		; move 3 into word addressed by r1
+173176:    000003
+173200:    132711       BITB #240,(R1)		; AND odd byte of word addressed by r1 with 240
+173202:    000240
+173204:    001773       BEQ 173174		; if result is 0, go to 173174
+173206:    100147       BPL 173526		; if high-order bit is clear, go to 173526
+173210:    111324       MOVB (R3),(R4)+		; move odd byte of word addressed by r3 into word addressed by r4, then increment r4
+173212:    000772       BR 173200		; go to 173200
+173214:    005000       CLR R0			; move 0 into r0
+173216:    000425       BR 173272		; go to 173272
+173220:    000000       HALT			; stop
+173222:    000666       BR 173000		; re-start
+173224:    173030       SUBF F0,@(R0)+		; constant for previous instruction
+173226:    000340       SWAB -(R0)		; decrement address in r0, then swap bytes of newly address word
+173230:    010037       MOV R0,@#40		; move contents of r0 into location 40
+173232:    000040
+173234:    012700       MOV #173622,R0		; move 173622 into r0
+173236:    173622
+173240:    010037       MOV R0,@#56		; move contents of r0 into location 56
+173242:    000056
+173244:    012700       MOV #56,R0		; move 56 into r0
+173246:    000056
+173250:    010640       MOV SP,-(R0)		; decrement r0, save stack pointer at resulting address
+173252:    010540       MOV R5,-(R0)		; decrement r0, save contents of r5 at resulting address
+173254:    010440       MOV R4,-(R0)		; decrement r0, save contents of r4 at resulting address
+173256:    010340       MOV R3,-(R0)		; decrement r0, save contents of r3 at resulting address
+173260:    010240       MOV R2,-(R0)		; decrement r0, save contents of r2 at resulting address
+173262:    010140       MOV R1,-(R0)		; decrement r0, save contents of r1 at resulting address
+173264:    014000       MOV -(R0),R0		; decrement r0, save contents of r0 at resulting address
+173266:    000177       JMP @56			; go to address located in 56
+173270:    004564
+173272:    005005       CLR R5			; set r5 = 0
+173274:    012737       MOV #173530,@#4		; move 173530 into location 4
+173276:    173530
+173300:    000004
+173302:    012706       MOV #20,SP		; move 20 into the stack pointer
+173304:    000020
+173306:    012701       MOV #177342,R1		; move 177342 into r1
+173310:    177342
+173312:    105011       CLRB (R1)		; set low order byte at address pointed to by r1 = 0
+173314:    005703       TST R3			; test high-order bit of r3
+173316:    100402       BMI 173324		; if negative = 1, go to 173324
+173320:    005306       DEC SP			; decrement stack pointer
+173322:    002426       BLT 173400		; if that goes negative, go to 173400
+173324:    000005       RESET			; blast Unibus
+173326:    110061       MOVB R0,1(R1)		; move odd byte of r0 into word following word addressed by r1
+173330:    000001
+173332:    052711       BIS #4003,(R1)		; word at r1 = word at r1 OR 4003
+173334:    004003
+173336:    005711       TST (R1)		; test high order bit of word at r1
+173340:    100376       BPL 173336		; if 0, loop back to 173336
+173342:    005761       TST 177776(R1)		; test high order bit of word at -2(r1)
+173344:    177776
+173346:    100361       BPL 173312		; if 0, go to 173312
+173350:    012761       MOV #177400,2(R1)	; move -400 into word at 2(r1)
+173352:    177400
+173354:    000002
+173356:    042711       BIC #4000,(R1)		; word at address in r1 = word at address in r1 & 3777
+173360:    004000
+173362:    112711       MOVB #5,(R1)		; move 5 into odd byte of word addressed by r1
+173364:    000005
+173366:    105711       TSTB (R1)		; test high bit of odd byte addressed by r1
+173370:    100376       BPL 173366		; if 0, loop back to 173366
+173372:    005711       TST (R1)		; test high bit of word addressed by r1
+173374:    100746       BMI 173312		; if 1, go to 173312
+173376:    005007       CLR PC			; set PC = 0
+173400:    000000       HALT			; stop!
+173402:    000776       BR 173400		; really, I mean it, stop!
+173404:    012706       MOV #20,SP		; move 20 into stack pointer
+173406:    000020
+173410:    012701       MOV #176700,R1		; move address of (register 0 of) RH11 into r1
+173412:    176700
+173414:    012702       MOV #4000,R2		; move 4000 into r2
+173416:    004000
+173420:    005705       TST R5			; test high order bit of r5
+173422:    100402       BMI 173430		; if 1, go to 173430
+173424:    005306       DEC SP			; decrement stack pointer
+173426:    002764       BLT 173400		; if that goes negative, go to 173400
+173430:    000005       RESET			; blast the Unibus
+173432:    110061       MOVB R0,10(R1)		; move odd byte of r0 into RH11 register 10
+173434:    000010
+173436:    012711       MOV #21,(R1)		; move 21 into RH11 register 0
+173440:    000021
+173442:    005061       CLR 34(R1)		; move 0 into RH11 register 34
+173444:    000034
+173446:    005061       CLR 6(R1)		; move 0 into RH11 register 6
+173450:    000006
+173452:    050261       BIS R2,32(R1)		; RH11 register 32 = RH11 register 32 OR contents of r2 (= 4000)
+173454:    000032
+173456:    012761       MOV #177400,2(R1)	; move -400 into RH11 register 2
+173460:    177400
+173462:    000002
+173464:    012711       MOV #71,(R1)		; move 71 into RH11 register 0
+173466:    000071
+173470:    105711       TSTB (R1)		; test high bit of odd byte of RH11 register 0
+173472:    100376       BPL 173470		; if 0, loop back to 173470
+173474:    032761       BIT #20,14(R1)		; test RH11 register 14 AND 20
+173476:    000020
+173500:    000014
+173502:    001402       BEQ 173510		; if result is 0, go to 173510
+173504:    052702       BIS #10000,R2		; r2 = contents of r2 OR 10000
+173506:    010000
+173510:    032711       BIT #60000,(R1)		; test RH11 register 0 AND 60000
+173512:    060000
+173514:    001341       BNE 173420		; if not 0, go to 173420
+173516:    032761       BIT #140000,12(R1)	; test RH11 register 12 AND 140000
+173520:    140000
+173522:    000012
+173524:    001335       BNE 173420		; if not 0, go to 173420
+173526:    005007       CLR PC			; set PC = 0
+173530:    012701       MOV #177560,R1		; console TTY register address to r1
+173532:    177560
+173534:    011706       MOV (PC),SP		; move word addressed by PC into stack pointer
+173536:    005004       CLR R4			; set r4 = 0
+173540:    012702       MOV #173610,R2		; move address of subroutine into r2
+173542:    173610
+173544:    004712       JSR PC,(R2)		; jump to subroutine addressed by r2
+173546:    124427       CMPB -(R4),#220		; decrement address in r4, compare odd byte at new address to 220
+173550:    000220
+173552:    001374       BNE 173544		; if not equal, to to 173544
+173554:    004742       JSR PC,-(R2)		;
+173556:    014403       MOV -(R4),R3		; decrement r4, move contents of word at new address into r3
+173560:    042703       BIC #140000,R3		; r3 = contents of r3 AND ~140000 = r3 AND 37777
+173562:    140000
+173564:    004712       JSR PC,(R2)		;
+173566:    004712       JSR PC,(R2)		;
+173570:    005722       TST (R2)+		; test high order bit of word addressed by r2, then increment r2
+173572:    004712       JSR PC,(R2)		;
+173574:    005004       CLR R4			; set r4 = 0
+173576:    004712       JSR PC,(R2)		;
+173600:    005303       DEC R3			; r3 = contents of r3 - 1
+173602:    003375       BGT 173576		; if result is greater than 0, go to 173576
+173604:    005007       CLR PC			; set PC = 0
+173606:    004717       JSR PC,(PC)		;
+173610:    105711       TSTB (R1)		; test high order bit of odd byte of word addressed by r1
+173612:    100376       BPL 173610		; if 0, loop back to 173610
+173614:    116124       MOVB 2(R1),(R4)+	; move odd byte of word at 2(r1) into word addressed by r4, then increment r4
+173616:    000002
+173620:    000207       RTS PC			; return from subroutine
+173622:    005005       CLR R5			; set r5 = 0
+173624:    012500       MOV (R5)+,R0		; move contents of word addressed by r5 into r0, then increment r5
+173626:    012501       MOV (R5)+,R1		; move contents of word addressed by r5 into r1, then increment r5
+173630:    011502       MOV (R5),R2		; move contents of word addressed by r5 into r2
+173632:    012725       MOV #173646,(R5)+	; move 173646 into word address addressed by r5, then increment r5
+173634:    173646
+173636:    011503       MOV (R5),R3		; move contents of word addressed by r5 into r3
+173640:    005015       CLR (R5)		; set word addressed by r5 = 0
+173642:    012704       MOV #174340,R4		; move 174340 into r4
+173644:    174340
+173646:    012706       MOV #140,SP		; move 140 into stack pointer
+173650:    000140
+173652:    062704       ADD #40,R4		; add 40 to contents of r4
+173654:    000040
+173656:    105704       TSTB R4			; test high bit of odd byte of r4
+173660:    100770       BMI 173642		; if 1, go to 173642
+173662:    032764       BIT #4000,34(R4)	; test word at 34(r4) AND 4000
+173664:    004000
+173666:    000034
+173670:    001770       BEQ 173652		; if 0, go to 173652
+173672:    026417       CMP 14(R4),(PC)		; compare word addressed by 14(r4) to word addressed by PC
+173674:    000014
+173676:    001365       BNE 173652		; if not equal, go to 173652
+173700:    010315       MOV R3,(R5)		; move contents of r3 into word addressed by r5
+173702:    010245       MOV R2,-(R5)		; decrement r5, then contents of r2 into new word addressed by r5
+173704:    010145       MOV R1,-(R5)		; decrement r5, then contents of r1 into new word addressed by r5
+173706:    010045       MOV R0,-(R5)		; decrement r5, then contents of r0 into new word addressed by r5
+173710:    012700       MOV #130,R0		; move 130 into r0
+173712:    000130
+173714:    012420       MOV (R4)+,(R0)+		; move contents of word addressed by r4 into word addressed by r0, then increment both
+173716:    022700       CMP #156,R0		; compare 156 to contents of r0
+173720:    000156
+173722:    103374       BCC 173714		; if there was a carry into most significant bit of result, go to 173714
+173724:    005724       TST (R4)+		; test high order bit of word addressed by r4, then increment r4
+173726:    010401       MOV R4,R1		; move contents of r4 into r1
+173730:    012700       MOV #100,R0		; move 100 into r0
+173732:    000100
+173734:    010021       MOV R0,(R1)+		; move contents of r0 into word addressed by r1, then increment t1
+173736:    005061       CLR 177744(R1)		; set word at -34(r1) = 0
+173740:    177744
+173742:    005061       CLR 177764(R1)		; set word at -14(r1) = 0
+173744:    177764
+173746:    032711       BIT #4000,(R1)		; test contents of word addressed by r1 AND 4000
+173750:    004000
+173752:    001775       BEQ 173746		; if result is 0, loop back to 173746
+173754:    010014       MOV R0,(R4)		; move contents of r0 into word addressed by r4
+173756:    005061       CLR 177766(R1)		; set word at -12(r1) = 0
+173760:    177766
+173762:    012761       MOV #107400,177762(R1)	; move 107400 into word at -16(r1)
+173764:    107400
+173766:    177762
+173770:    105711       TSTB (R1)		; test high bit of odd byte of word addressed by r1
+173772:    100376       BPL 173770		; if 0, loop back to 173770
+173774:    005007       CLR PC			; set PC = 0
+173776:    000000       HALT			; stop
+
+<end of bootstrap ROM code>
+
+174000:    177570       LDCFD F1,@0(R0)

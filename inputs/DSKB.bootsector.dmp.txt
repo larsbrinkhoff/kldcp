@@ -1,0 +1,259 @@
+x000:   240             NOP			; only thing safe in location 0
+x002:   12711           MOV #21,(R1)		; read-in preset
+x004:   21
+x006:   5004            CLR R4			; set r4 = 0
+x010:   5061            CLR 4(R1)		; set RH11 register 4 = 0 (bus address)
+x012:   4
+x014:   12761           MOV #3,34(R1)		; move 3 into RH11 register 34 (desired cylinder
+x016:   3
+x020:   34
+x022:   12761           MOV #2023,6(R1)		; move 2023 into RH11 register 6 (desired sector/track)
+x024:   2023					; 00000100 00010011 = sector 4, track 23 (x13)
+x026:   6
+x030:   52761           BIS #4000,32(R1)	; RH11 register 32 |= 4000 (offset, error correct inhibit)
+x032:   4000
+x034:   32
+x036:   112711          MOVB #70,(R1)		; move READ w/o GO into RH11 register 0
+x040:   70
+x042:   12761           MOV #176000,2(R1)	; move -2000 into RH11 register 2 (word count)
+x044:   176000
+x046:   2
+x050:   105211          INCB (R1)		; set GO bit in RH11 register 0
+x052:   105711          TSTB (R1)		; test READY bit in RH11 register 0
+x054:   100376          BPL x052		; if 0, loop back to test
+x056:   32711           BIT #60000,(R1)		; test RH11 register 0 AND 60000 (error bits in ctrl reg)
+x060:   60000
+x062:   1346            BNE x000		; if not zero bits, loop
+x064:   32761           BIT #140000,12(R1)	; test drive status AND 140000 (ATTN, ERROR SUM)
+x066:   140000
+x070:   12
+x072:   1342            BNE x000		; if not zero bits, loop
+x074:   62704           ADD #40,R4		;
+x076:   40
+x100:   22704           CMP #1300,R4		; has r4 reached 1300?
+x102:   1300
+x104:   101356          BHI x042		; no, go read more
+x106:   12737           MOV #340,@#177776	; clear carry, zero, overflow, negative and trace-trap, set PSW priority = 7
+x110:   340
+x112:   177776
+x114:   12706           MOV #1000,SP		; set stack poiner = 1000
+x116:   1000
+x120:   10546           MOV R5,-(SP)		; decrement SP, then move contents of r5 into word newly addressed
+x122:   12746           MOV #4340,-(SP)		; decrement SP, then move 4340 into word newly addressed
+x124:   4340
+x126:   12746           MOV #103540,-(SP)	; decrement SP, then move 103540 into word newly addressed
+x130:   103540
+x132:   2               RTI			; return from interrupt:
+						; pop SP into PC
+						; pop SP into PSW: priority 7, general register set 1
+
+x134:   12701           MOV #176700,R1
+x136:   176700
+x140:   5004            CLR R4
+x142:   113761          MOVB @#100650,10(R1)
+x144:   100650
+x146:   10
+x150:   32711           BIT #4000,(R1)
+x152:   4000
+x154:   1442            BEQ x262
+x156:   12711           MOV #21,(R1)
+x160:   21
+x162:   5061            CLR 4(R1)
+x164:   4
+x166:   13761           MOV @#100610,34(R1)
+x170:   100610
+x172:   34
+x174:   13761           MOV @#100612,6(R1)
+x176:   100612
+x200:   6
+x202:   52761           BIS #4000,32(R1)
+x204:   4000
+x206:   32
+x210:   112711          MOVB #60,(R1)
+x212:   60
+x214:   12761           MOV #177400,2(R1)
+x216:   177400
+x220:   2
+x222:   105211          INCB (R1)
+x224:   105711          TSTB (R1)
+x226:   100376          BPL x224
+x230:   32711           BIT #60000,(R1)
+x232:   60000
+x234:   1012            BNE x262
+x236:   32761           BIT #140000,12(R1)
+x240:   140000
+x242:   12
+x244:   1006            BNE x262
+x246:   62704           ADD #10,R4
+x250:   10
+x252:   23704           CMP @#100620,R4
+x254:   100620
+x256:   101356          BHI x214
+x260:   207             RTS PC
+x262:   105237          INCB @#100664
+x264:   100664
+x266:   137             JMP @#103540
+x270:   103540
+x272:   10100           MOV R1,R0
+x274:   207             RTS PC
+x276:   240             NOP
+x300:   12702           MOV #0,R2
+x302:   0
+x304:   10203           MOV R2,R3
+x306:   162703          SUB #3,R3
+x310:   3
+x312:   5004            CLR R4
+x314:   5061            CLR 4(R1)
+x316:   4
+x320:   112711          MOVB #2,(R1)
+x322:   2
+x324:   52711           BIS #4000,(R1)
+x326:   4000
+x330:   105211          INCB (R1)
+x332:   105711          TSTB (R1)
+x334:   100376          BPL x332
+x336:   5711            TST (R1)
+x340:   100007          BPL x360
+x342:   5761            TST 177776(R1)
+x344:   177776
+x346:   100353          BPL x276
+x350:   32711           BIT #4000,(R1)
+x352:   4000
+x354:   1763            BEQ x324
+x356:   403             BR x366
+x360:   26103           CMP 6(R1),R3
+x362:   6
+x364:   3357            BGT x324
+x366:   42711           BIC #4000,(R1)
+x370:   4000
+x372:   105211          INCB (R1)
+x374:   105711          TSTB (R1)
+x376:   100376          BPL x374
+x400:   5711            TST (R1)
+x402:   100757          BMI x342
+x404:   26102           CMP 6(R1),R2
+x406:   6
+x410:   2766            BLT x366
+x412:   3344            BGT x324
+x414:   112711          MOVB #4,(R1)
+x416:   4
+x420:   12761           MOV #176000,2(R1)
+x422:   176000
+x424:   2
+x426:   105211          INCB (R1)
+x430:   105711          TSTB (R1)
+x432:   100376          BPL x430
+x434:   5711            TST (R1)
+x436:   100717          BMI x276
+x440:   62704           ADD #40,R4
+x442:   40
+x444:   22704           CMP #0,R4
+x446:   0
+x450:   101363          BHI x420
+x452:   112711          MOVB #11,(R1)
+x454:   11
+x456:   12737           MOV #340,@#177776
+x460:   340
+x462:   177776
+x464:   12706           MOV #1000,SP
+x466:   1000
+x470:   10546           MOV R5,-(SP)
+x472:   12746           MOV #4340,-(SP)
+x474:   4340
+x476:   12746           MOV #103540,-(SP)
+x500:   103540
+x502:   2               RTI
+x504:   12701           MOV #177342,R1
+x506:   177342
+x510:   13702           MOV @#100610,R2
+x512:   100610
+x514:   10203           MOV R2,R3
+x516:   162703          SUB #3,R3
+x520:   3
+x522:   113761          MOVB @#100650,1(R1)
+x524:   100650
+x526:   1
+x530:   5004            CLR R4
+x532:   5061            CLR 4(R1)
+x534:   4
+x536:   112711          MOVB #2,(R1)
+x540:   2
+x542:   52711           BIS #4000,(R1)
+x544:   4000
+x546:   105211          INCB (R1)
+x550:   105711          TSTB (R1)
+x552:   100376          BPL x550
+x554:   5711            TST (R1)
+x556:   100007          BPL x576
+x560:   5761            TST 177776(R1)
+x562:   177776
+x564:   100244          BPL x276
+x566:   32711           BIT #4000,(R1)
+x570:   4000
+x572:   1763            BEQ x542
+x574:   403             BR x604
+x576:   26103           CMP 6(R1),R3
+x600:   6
+x602:   3357            BGT x542
+x604:   42711           BIC #4000,(R1)
+x606:   4000
+x610:   105211          INCB (R1)
+x612:   105711          TSTB (R1)
+x614:   100376          BPL x612
+x616:   5711            TST (R1)
+x620:   100757          BMI x560
+x622:   26102           CMP 6(R1),R2
+x624:   6
+x626:   2766            BLT x604
+x630:   3344            BGT x542
+x632:   112711          MOVB #14,(R1)
+x634:   14
+x636:   12761           MOV #177400,2(R1)
+x640:   177400
+x642:   2
+x644:   105211          INCB (R1)
+x646:   105711          TSTB (R1)
+x650:   100376          BPL x646
+x652:   5711            TST (R1)
+x654:   100410          BMI x676
+x656:   62704           ADD #10,R4
+x660:   10
+x662:   23704           CMP @#100620,R4
+x664:   100620
+x666:   101363          BHI x636
+x670:   112711          MOVB #11,(R1)
+x672:   11
+x674:   207             RTS PC
+x676:   137             JMP @#110770
+x700:   110770
+x702:   4537            JSR R5,@#114006
+x704:   114006
+x706:   177560          LDCFD F1,1(R0)
+x710:   1
+x712:   0               HALT
+x714:   0               HALT
+x716:   112170          MOVB (R1)+,@117230(R0)
+x720:   117230
+x722:   113124          MOVB @(R1)+,(R4)+
+x724:   0               HALT
+x726:   0               HALT
+x730:   0               HALT
+x732:   200             RTS R0
+x734:   64              000064
+x736:   4537            JSR R5,@#114006
+x740:   114006
+x742:   175610          STCFI F2,(R0)
+x744:   1               WAIT
+x746:   0               HALT
+x750:   0               HALT
+x752:   112203          MOVB (R2)+,R3
+x754:   117164          MOVB @113124(R1),0(R4)
+x756:   113124
+x760:   0
+x762:   0               HALT
+x764:   0               HALT
+x766:   200             RTS R0
+x770:   304             SWAB R4
+x772:   4537            JSR R5,@#114006
+x774:   114006
+x776:   202             RTS R2
